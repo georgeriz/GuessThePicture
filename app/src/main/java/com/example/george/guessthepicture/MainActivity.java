@@ -22,15 +22,31 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     final static String TAG = "my_app_info";
+    String[] urls = new String[] {
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png","http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png","http://i.imgur.com/7spzG.png","http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "http://i.imgur.com/7spzG.png",
+            "https://pixabay.com/static/uploads/photo/2014/08/18/23/11/paprika-421087_640.jpg"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String url = "http://i.imgur.com/7spzG.png";
         DownloadTask downloadTask = new DownloadTask(getApplicationContext());
-        downloadTask.execute(url);
+        downloadTask.execute(urls);
     }
 
     public void onStartClicked(View v) {

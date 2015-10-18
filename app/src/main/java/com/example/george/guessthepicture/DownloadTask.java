@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,19 +26,27 @@ public class DownloadTask extends AsyncTask<String, Integer, Long> {
 
     @Override
     protected Long doInBackground(String... params) {
-        try {
-            InputStream is = (InputStream) new URL(params[0]).getContent();
-            File path = myContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            File file = new File(path, "new_image.png");
-            Bitmap bm = BitmapFactory.decodeStream(is);
-            is.close();
-            OutputStream os = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.PNG, 100, os);
-            os.close();
+        int i = 0;
+        for(String url: params) {
+            try {
+                InputStream is = (InputStream) new URL(url).getContent();
+                File path = myContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                File file = new File(path, "new_image_" + i++ + ".png");
+                Bitmap bm = BitmapFactory.decodeStream(is);
+                is.close();
+                OutputStream os = new FileOutputStream(file);
+                bm.compress(Bitmap.CompressFormat.PNG, 100, os);
+                os.close();
 
-        }catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Long result) {
+        Toast.makeText(myContext, "Download and save complete", Toast.LENGTH_LONG).show();
     }
 }
