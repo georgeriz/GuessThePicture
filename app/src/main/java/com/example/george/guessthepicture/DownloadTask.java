@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -26,16 +27,19 @@ public class DownloadTask extends AsyncTask<String, Integer, Long> {
 
     @Override
     protected Long doInBackground(String... params) {
+        File path = myContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        for (File file: path.listFiles()){
+            file.delete();
+        }
         int i = 0;
         for(String url: params) {
             try {
                 InputStream is = (InputStream) new URL(url).getContent();
-                File path = myContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 File file = new File(path, "new_image_" + i++ + ".png");
                 Bitmap bm = BitmapFactory.decodeStream(is);
                 is.close();
                 OutputStream os = new FileOutputStream(file);
-                bm.compress(Bitmap.CompressFormat.PNG, 100, os);
+                bm.compress(Bitmap.CompressFormat.PNG, 90, os);
                 os.close();
 
             } catch (Exception e) {
@@ -47,6 +51,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Long> {
 
     @Override
     protected void onPostExecute(Long result) {
+        Log.i(MainActivity.TAG, "Download and save complete");
         Toast.makeText(myContext, "Download and save complete", Toast.LENGTH_LONG).show();
     }
 }

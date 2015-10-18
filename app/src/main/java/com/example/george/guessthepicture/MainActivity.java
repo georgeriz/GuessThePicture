@@ -22,22 +22,17 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     final static String TAG = "my_app_info";
-    String[] urls = new String[] {
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png","http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png","http://i.imgur.com/7spzG.png","http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "http://i.imgur.com/7spzG.png",
-            "https://pixabay.com/static/uploads/photo/2014/08/18/23/11/paprika-421087_640.jpg"
+    String[] urls = new String[]{
+            "http://imageshack.com/a/img903/2326/1SxlwD.png",
+            "http://imageshack.com/a/img911/3747/VfAtSv.jpg",
+            "http://imageshack.com/a/img905/9069/U4Mn9z.png",
+            "http://imageshack.com/a/img911/519/kWViay.png",
+            "http://imageshack.com/a/img905/451/NV64JH.jpg",
+            "http://imageshack.com/a/img908/6282/3q3c9n.jpg",
+            "http://imageshack.com/a/img633/5608/TowVW5.jpg",
+            "http://imageshack.com/a/img633/5922/WigLai.jpg",
+            "http://imageshack.com/a/img909/5145/BJUcnf.jpg",
+            "http://imageshack.com/a/img633/7128/orbP0e.jpg"
     };
 
     @Override

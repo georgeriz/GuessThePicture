@@ -16,6 +16,8 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -27,10 +29,12 @@ public class GameActivity extends AppCompatActivity {
         ImageView imageView = (ImageView) findViewById(R.id.image_view);
 
         File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        ArrayList<File> files = new ArrayList<>();
         for (File child: path.listFiles()){
-            Log.i(MainActivity.TAG, "File found");
-            Picasso.with(getApplicationContext()).load(child).into(imageView);
+            files.add(child);
         }
+        File random_file = files.get(new Random().nextInt(files.size()));
+        Picasso.with(getApplicationContext()).load(random_file).into(imageView);
     }
 
 
