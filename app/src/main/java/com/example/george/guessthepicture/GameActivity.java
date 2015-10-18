@@ -1,11 +1,21 @@
 package com.example.george.guessthepicture;
 
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -16,9 +26,11 @@ public class GameActivity extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.image_view);
 
-        TypedArray images = getResources().obtainTypedArray(R.array.images);
-        imageView.setImageDrawable(images.getDrawable(1));
-
+        File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        for (File child: path.listFiles()){
+            Log.i(MainActivity.TAG, "File found");
+            Picasso.with(getApplicationContext()).load(child).into(imageView);
+        }
     }
 
 

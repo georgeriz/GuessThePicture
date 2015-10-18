@@ -1,18 +1,36 @@
 package com.example.george.guessthepicture;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
+    final static String TAG = "my_app_info";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String url = "http://i.imgur.com/7spzG.png";
+        DownloadTask downloadTask = new DownloadTask(getApplicationContext());
+        downloadTask.execute(url);
     }
 
     public void onStartClicked(View v) {
