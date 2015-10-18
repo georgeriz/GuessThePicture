@@ -1,62 +1,88 @@
 package com.example.george.guessthepicture;
 
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends FragmentActivity {
+    /**
+     * The number of pages (wizard steps) to show in this demo.
+     */
+    //private static final int NUM_PAGES = 5;
+
+    /**
+     * The pager widget, which handles animation and allows swiping horizontally to access previous
+     * and next wizard steps.
+     */
+    private ViewPager mPager;
+
+    /**
+     * The pager adapter, which provides the pages to the view pager widget.
+     */
+    private PagerAdapter mPagerAdapter;
+
+    public static ArrayList<File> files;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        ImageView imageView = (ImageView) findViewById(R.id.image_view);
-
         File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        ArrayList<File> files = new ArrayList<>();
+        files = new ArrayList<>();
         for (File child: path.listFiles()){
             files.add(child);
         }
-        File random_file = files.get(new Random().nextInt(files.size()));
-        Picasso.with(getApplicationContext()).load(random_file).into(imageView);
+
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), files.size());
+        mPager.setAdapter(mPagerAdapter);
+
+
     }
 
+    /*@Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }*/
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_game, menu);
-        return true;
-    }
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        private final int mSize;
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        public ScreenSlidePagerAdapter(FragmentManager fm, int size) {
+            super(fm);
+            mSize = size;
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        public Fragment getItem(int position) {
+            return ScreenSlidePageFragment.newInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mSize;
+        }
     }
 }
