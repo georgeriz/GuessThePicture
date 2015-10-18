@@ -2,23 +2,21 @@ package com.example.george.guessthepicture;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.util.Random;
-
-/**
- * Created by George on 2015-10-18.
- */
 public class ScreenSlidePageFragment extends Fragment {
     private static final String IMAGE_DATA_EXTRA = "resId";
     private int mImageNum;
     private ImageView mImageView;
+    private GestureDetectorCompat mDetector;
 
     static ScreenSlidePageFragment newInstance(int imageNum) {
         final ScreenSlidePageFragment f = new ScreenSlidePageFragment();
@@ -40,9 +38,18 @@ public class ScreenSlidePageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mDetector = new GestureDetectorCompat(getActivity(), new MyGestureListener());
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_screen_slide_page,
                 container, false);
         mImageView = (ImageView) rootView.findViewById(R.id.image_content);
+        mImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mDetector.onTouchEvent(event);
+            }
+        });
         return rootView;
     }
 
@@ -51,6 +58,31 @@ public class ScreenSlidePageFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //get the corresponding file and display it
         Picasso.with(getActivity()).load(GameActivity.files.get(mImageNum)).into(mImageView);
+    }
 
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            next();
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+            next();
+            return true;
+        }
+    }
+
+    private void next() {
+        GameActivity gameActivity = (GameActivity) getActivity();
+        gameActivity.next();
     }
 }

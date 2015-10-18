@@ -15,15 +15,10 @@ import java.util.Random;
 
 public class GameActivity extends FragmentActivity {
     /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
-    //private static final int NUM_PAGES = 5;
-
-    /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
      */
-    private ViewPager mPager;
+    private CustomViewPager mPager;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -44,45 +39,12 @@ public class GameActivity extends FragmentActivity {
         }
 
         // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager = (CustomViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), files.size());
         mPager.setAdapter(mPagerAdapter);
-
-
     }
 
-    /*@Override
-    public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }*/
-
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        private final int mSize;
-
-        public ScreenSlidePagerAdapter(FragmentManager fm, int size) {
-            super(fm);
-            mSize = size;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return ScreenSlidePageFragment.newInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mSize;
-        }
+    public void next() {
+        mPager.setCurrentItem(mPager.getCurrentItem() + 1);
     }
 }
