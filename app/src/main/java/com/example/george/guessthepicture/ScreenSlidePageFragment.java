@@ -57,7 +57,8 @@ public class ScreenSlidePageFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //get the corresponding file and display it
-        Picasso.with(getActivity()).load(GameActivity.files.get(mImageNum)).into(mImageView);
+        Picasso.with(getActivity()).load(GameActivity.files.get(mImageNum)).fit()
+                .centerInside().into(mImageView);
     }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
