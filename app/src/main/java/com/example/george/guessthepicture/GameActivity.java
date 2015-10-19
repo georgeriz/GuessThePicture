@@ -2,16 +2,12 @@ package com.example.george.guessthepicture;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class GameActivity extends FragmentActivity {
     /**
@@ -38,10 +34,15 @@ public class GameActivity extends FragmentActivity {
             files.add(child);
         }
 
-        // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (CustomViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), files.size());
-        mPager.setAdapter(mPagerAdapter);
+        if(files.size() == 0) {
+            Toast.makeText(getApplicationContext(), "Download first", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+            // Instantiate a ViewPager and a PagerAdapter.
+            mPager = (CustomViewPager) findViewById(R.id.pager);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), files.size());
+            mPager.setAdapter(mPagerAdapter);
+        }
     }
 
     public void next() {
