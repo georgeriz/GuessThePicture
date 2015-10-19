@@ -35,11 +35,11 @@ public class DownloadTask extends AsyncTask<String, Integer, Long> {
         for(String url: params) {
             try {
                 InputStream is = (InputStream) new URL(url).getContent();
-                File file = new File(path, "new_image_" + i++ + ".png");
+                File file = new File(path, "new_image_" + i++ + ".jpeg");
                 Bitmap bm = BitmapFactory.decodeStream(is);
                 is.close();
                 OutputStream os = new FileOutputStream(file);
-                bm.compress(Bitmap.CompressFormat.PNG, 90, os);
+                bm.compress(Bitmap.CompressFormat.JPEG, 90, os);
                 os.close();
 
             } catch (Exception e) {
