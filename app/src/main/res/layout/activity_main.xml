@@ -17,4 +17,13 @@
         android:id="@+id/start_game_button"
         android:onClick="onStartClicked"/>
 
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/start_game_button"
+        android:text="Refresh"
+        android:id="@+id/refresh_button"
+        android:onClick="refresh"/>
+
 </RelativeLayout>

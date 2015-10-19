@@ -39,15 +39,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //temporary
-        /*DownloadTask downloadTask = new DownloadTask(getApplicationContext());
-        downloadTask.execute(urls);*/
     }
 
     public void onStartClicked(View v) {
         Intent intent = new Intent(getApplicationContext(), GameActivity.class);
         startActivity(intent);
+    }
+
+    public void refresh(View v) {
+        DownloadTask downloadTask = new DownloadTask(getApplicationContext());
+        downloadTask.execute(urls);
     }
 
     @Override
