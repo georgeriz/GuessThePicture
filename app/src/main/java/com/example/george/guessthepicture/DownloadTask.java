@@ -1,11 +1,14 @@
 package com.example.george.guessthepicture;
 
-import android.content.ContentValues;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,10 +22,23 @@ import java.net.URL;
  * Created by George on 2015-10-18.
  */
 public class DownloadTask extends AsyncTask<String, Integer, Long> {
+    private final int NOTIFICATION_ID = 1;
+    private final int PENDING_INTENT_REQUEST_CODE = 0;
     private Context myContext;
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mBuilder;
 
     public DownloadTask(Context context) {
         myContext = context;
+        Intent intent = new Intent(myContext, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(myContext,
+                PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mNotifyManager = (NotificationManager) myContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new NotificationCompat.Builder(myContext);
+        mBuilder.setContentTitle("Images Download")
+                .setContentText("Download in progress")
+                .setSmallIcon(R.drawable.icon_notification_cards_spades)
+        .setContentIntent(pendingIntent);
     }
 
     @Override
@@ -45,6 +61,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Long> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            mBuilder.setProgress(10, i, false);
+            mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
         }
         return null;
     }
@@ -53,5 +71,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Long> {
     protected void onPostExecute(Long result) {
         Log.i(MainActivity.TAG, "Download and save complete");
         Toast.makeText(myContext, "Download and save complete", Toast.LENGTH_LONG).show();
+        mBuilder.setContentText("Download complete")
+                .setProgress(0, 0, false);
+        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 }
