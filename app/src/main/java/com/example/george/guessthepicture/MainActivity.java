@@ -31,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             String state = Environment.getExternalStorageState();
             if (Environment.MEDIA_MOUNTED.equals(state)) {
-                DownloadTask downloadTask = new DownloadTask(getApplicationContext(), 15);
-                downloadTask.execute(URL_Pool.imgur15());
+                DownloadTask downloadTask = new DownloadTask(getApplicationContext(), 25);
+                downloadTask.execute(URL_Pool.imgur15_imageshack10());
             } else {
-                Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG);
+                Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "No network found", Toast.LENGTH_LONG);
+            Toast.makeText(this, "No network found", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -27,14 +28,17 @@ import java.net.URL;
 public class DownloadTask extends AsyncTask<String, Integer, Integer> {
     private final int NOTIFICATION_ID = 1;
     private final int PENDING_INTENT_REQUEST_CODE = 0;
+    static final String SHARED_PREFERENCES = "com.example.george.guessthepicture.SHARED_PREFERENCES";
     private final Context myContext;
     private final int maxNumberOfFiles;
     private NotificationManager mNotifyManager;
     private NotificationCompat.Builder mBuilder;
+    private File pictures_path;
 
     public DownloadTask(Context context, int maxNumberOfFiles) {
         myContext = context;
         this.maxNumberOfFiles = maxNumberOfFiles;
+        pictures_path = myContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         Intent intent = new Intent(myContext, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(myContext,
                 PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -49,8 +53,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
 
     @Override
     protected Integer doInBackground(String... params) {
-        File path = myContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        for (File file : path.listFiles()) {
+        for (File file : pictures_path.listFiles()) {
             file.delete();
         }
         int numberOfFile = 0;
@@ -61,7 +64,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
                 Bitmap bm = BitmapFactory.decodeStream(is);
                 is.close();
                 //output stream to file
-                File file = new File(path, "new_image_" + numberOfFile++ + ".jpeg");
+                File file = new File(pictures_path, "new_image_" + numberOfFile++ + ".jpeg");
                 OutputStream os = new FileOutputStream(file);
                 bm.compress(Bitmap.CompressFormat.JPEG, 90, os);
                 os.close();
@@ -89,8 +92,24 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
+        Log.i(MainActivity.TAG, "Download and save complete");
         Toast.makeText(myContext, "Download and save complete", Toast.LENGTH_LONG).show();
         mBuilder.setContentText("Download complete").setProgress(0, 0, false);
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        tt();
+    }
+
+    private void tt() {
+        SharedPreferences sp = myContext.getSharedPreferences(SHARED_PREFERENCES, 0);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.clear();
+        ttt(spe);
+        spe.apply();
+    }
+
+    private void ttt(SharedPreferences.Editor editor) {
+        for(File child: pictures_path.listFiles()) {
+            editor.putInt(child.getName(), 0);
+        }
     }
 }
