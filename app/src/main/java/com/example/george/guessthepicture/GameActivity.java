@@ -9,10 +9,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class GameActivity extends FragmentActivity {
+    final static String STATE_ = "com.example.george.guessthepicture.STATE";
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -25,28 +24,28 @@ public class GameActivity extends FragmentActivity {
     private PagerAdapter mPagerAdapter;
 
     private Custom punch;
-    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        punch = new Custom();
-        File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
+        if (savedInstanceState == null) {
+            punch = new Custom();
+            File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            SharedPreferences sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
 
-        for (File child: path.listFiles()){
-            punch.add(child, sp.getInt(child.getName(), 0));
+            for (File child : path.listFiles()) {
+                punch.add(child, sp.getInt(child.getName(), 0));
+            }
+            //choose randomly
+            punch.shuffle();
+        } else {
+            punch = savedInstanceState.getParcelable(STATE_);
         }
-        //get "times" accessed
-
-        //choose randomly
-        //Collections.shuffle(files);
-        punch.shuffle();
         //debugging
         for(int i = 0; i < punch.size(); i++){
-            Log.i(MainActivity.TAG, "times: " + punch.getTimes(i));
+            Log.i(MainActivity.TAG, punch.getFile(i).getName() + " at: " + punch.getTimes(i));
         }
 
         if(punch.size() == 0) {
@@ -73,8 +72,15 @@ public class GameActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelable(STATE_, punch);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        SharedPreferences sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
         SharedPreferences.Editor spe = sp.edit();
         spe.clear();
         for(int j = 0; j < punch.size(); j++) {

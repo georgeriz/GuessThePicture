@@ -17,6 +17,7 @@ public class ScreenSlidePageFragment extends Fragment {
     private int mImageNum;
     private ImageView mImageView;
     private GestureDetectorCompat mDetector;
+    private GameActivity gameActivity;
 
     static ScreenSlidePageFragment newInstance(int imageNum) {
         final ScreenSlidePageFragment f = new ScreenSlidePageFragment();
@@ -33,6 +34,7 @@ public class ScreenSlidePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mImageNum = getArguments() != null ? getArguments().getInt(IMAGE_DATA_EXTRA) : -1;
+        gameActivity = (GameActivity) getActivity();
     }
 
     @Override
@@ -57,10 +59,8 @@ public class ScreenSlidePageFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //get the corresponding file and display it
-        GameActivity gameActivity = (GameActivity) getActivity();
         Picasso.with(getActivity()).load(gameActivity.getFile(mImageNum)).fit()
                 .centerInside().into(mImageView);
-        gameActivity.setTimes(mImageNum);
     }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -73,19 +73,20 @@ public class ScreenSlidePageFragment extends Fragment {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
+            gameActivity.setTimes(mImageNum);
             next();
             return true;
         }
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
+            gameActivity.setTimes(mImageNum);
             next();
             return true;
         }
     }
 
     private void next() {
-        GameActivity gameActivity = (GameActivity) getActivity();
         gameActivity.next();
     }
 }
