@@ -1,11 +1,15 @@
 package com.example.george.guessthepicture;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     final static String TAG = "my_app_info";
@@ -22,8 +26,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refresh(View v) {
-        DownloadTask downloadTask = new DownloadTask(getApplicationContext());
-        downloadTask.execute(URL_Pool.imgur15());
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state)) {
+                DownloadTask downloadTask = new DownloadTask(getApplicationContext(), 15);
+                downloadTask.execute(URL_Pool.imgur15());
+            } else {
+                Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG);
+            }
+        } else {
+            Toast.makeText(this, "No network found", Toast.LENGTH_LONG);
+        }
     }
 
     @Override
