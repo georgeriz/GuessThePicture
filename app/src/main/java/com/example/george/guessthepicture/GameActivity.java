@@ -2,6 +2,8 @@ package com.example.george.guessthepicture;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -24,6 +26,8 @@ public class GameActivity extends FragmentActivity {
     private int nCorrect;
     private int nTotal;
     private CountDownTimer timer;
+    private SoundPool soundPool;
+    private int[] soundIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,10 @@ public class GameActivity extends FragmentActivity {
         setContentView(R.layout.activity_game);
 
         initialize();
+        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        soundIDs = new int[2];
+        soundIDs[0] = soundPool.load(getApplicationContext(), R.raw.correct, 1);
+        soundIDs[1] = soundPool.load(getApplicationContext(), R.raw.wrong, 1);
 
         if(holder.size() == 0) {
             Toast.makeText(getApplicationContext(), "Download first", Toast.LENGTH_LONG).show();
@@ -83,6 +91,9 @@ public class GameActivity extends FragmentActivity {
         //check if slide was guessed correctly
         if (isCorrect) {
             nCorrect++;
+            soundPool.play(soundIDs[0], 1,1,1,0,1);
+        } else {
+            soundPool.play(soundIDs[1], 1,1,1,0,1);
         }
         nTotal++;
     }
