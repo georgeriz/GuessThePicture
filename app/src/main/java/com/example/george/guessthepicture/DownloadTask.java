@@ -96,20 +96,16 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
         Toast.makeText(myContext, "Download and save complete", Toast.LENGTH_LONG).show();
         mBuilder.setContentText("Download complete").setProgress(0, 0, false);
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
-        tt();
+        updateSharedPreferences();
     }
 
-    private void tt() {
-        SharedPreferences sp = myContext.getSharedPreferences(SHARED_PREFERENCES, 0);
-        SharedPreferences.Editor spe = sp.edit();
-        spe.clear();
-        ttt(spe);
-        spe.apply();
-    }
-
-    private void ttt(SharedPreferences.Editor editor) {
+    private void updateSharedPreferences() {
+        SharedPreferences sharedPreferences = myContext.getSharedPreferences(SHARED_PREFERENCES, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
         for(File child: pictures_path.listFiles()) {
-            editor.putInt(child.getName(), 0);
+            editor.putBoolean(child.getName(), false);
         }
+        editor.apply();
     }
 }

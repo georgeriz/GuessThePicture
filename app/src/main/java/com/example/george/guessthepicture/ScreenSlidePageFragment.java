@@ -73,22 +73,14 @@ public class ScreenSlidePageFragment extends Fragment {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            gameActivity.setTimes(mImageNum);
-            gameActivity.setCorrectGuess(true);
-            next();
+            gameActivity.setCorrectGuess(mImageNum, true);
             return true;
         }
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
-            gameActivity.setTimes(mImageNum);
-            gameActivity.setCorrectGuess(false);
-            next();
+            gameActivity.setCorrectGuess(mImageNum, false);
             return true;
         }
-    }
-
-    private void next() {
-        gameActivity.next();
     }
 }
