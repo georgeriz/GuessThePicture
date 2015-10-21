@@ -76,16 +76,18 @@ public class GameActivity extends FragmentActivity {
         return holder.getFile(index);
     }
 
-    public void setCorrectGuess(int index, boolean isCorrect) {
+    public void setGuess(int index, boolean isCorrect) {
         //inform that this slides has been played
         holder.setPlayed(index);
 
         //check if slide was guessed correctly
-        if(isCorrect) {
+        if (isCorrect) {
             nCorrect++;
         }
         nTotal++;
+    }
 
+    public void next() {
         //move to next slide
         mPager.setCurrentItem(mPager.getCurrentItem() + 1);
     }
