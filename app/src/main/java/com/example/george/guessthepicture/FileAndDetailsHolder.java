@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * Created by George on 2015-10-20.
  */
-public class Custom {
+public class FileAndDetailsHolder {
     private class Item {
         private File file;
         private Boolean played;
@@ -26,7 +26,7 @@ public class Custom {
     }
     private ArrayList<Item> list;
 
-    public Custom() { list = new ArrayList<>(); }
+    public FileAndDetailsHolder() { list = new ArrayList<>(); }
 
     public void add(File f, boolean played) { list.add(new Item(f, played)); }
 

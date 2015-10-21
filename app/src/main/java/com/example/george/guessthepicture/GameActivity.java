@@ -20,7 +20,7 @@ public class GameActivity extends FragmentActivity {
      */
     private CustomViewPager mPager;
 
-    private Custom punch;
+    private FileAndDetailsHolder holder;
     private int nCorrect;
     private int nTotal;
     private CountDownTimer timer;
@@ -32,13 +32,13 @@ public class GameActivity extends FragmentActivity {
 
         initialize();
 
-        if(punch.size() == 0) {
+        if(holder.size() == 0) {
             Toast.makeText(getApplicationContext(), "Download first", Toast.LENGTH_LONG).show();
             finish();
         } else {
             // Instantiate a ViewPager and a PagerAdapter.
             mPager = (CustomViewPager) findViewById(R.id.pager);
-            PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), punch.size());
+            PagerAdapter mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), holder.size());
             mPager.setAdapter(mPagerAdapter);
         }
 
@@ -61,24 +61,24 @@ public class GameActivity extends FragmentActivity {
 
     private void initialize() {
         nCorrect = nTotal = 0;
-        punch = new Custom();
+        holder = new FileAndDetailsHolder();
         File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         SharedPreferences sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
 
         for (File child: path.listFiles()) {
-            punch.add(child, sp.getBoolean(child.getName(), false));
+            holder.add(child, sp.getBoolean(child.getName(), false));
         }
         //choose randomly
-        punch.shuffle();
+        holder.shuffle();
     }
 
     public File getFile(int index) {
-        return punch.getFile(index);
+        return holder.getFile(index);
     }
 
     public void setCorrectGuess(int index, boolean isCorrect) {
         //inform that this slides has been played
-        punch.setPlayed(index);
+        holder.setPlayed(index);
 
         //check if slide was guessed correctly
         if(isCorrect) {
@@ -103,8 +103,8 @@ public class GameActivity extends FragmentActivity {
         SharedPreferences sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
         SharedPreferences.Editor spe = sp.edit();
         spe.clear();
-        for(int j = 0; j < punch.size(); j++) {
-            spe.putBoolean(punch.getFile(j).getName(), punch.wasPlayed(j));
+        for(int j = 0; j < holder.size(); j++) {
+            spe.putBoolean(holder.getFile(j).getName(), holder.wasPlayed(j));
         }
         spe.apply();
         timer.cancel();
