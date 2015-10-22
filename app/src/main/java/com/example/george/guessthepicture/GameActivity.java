@@ -91,7 +91,9 @@ public class GameActivity extends FragmentActivity {
         timer = new CountDownTimer(8000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
+                if (millisUntilFinished <= 5000) {
+                    soundPool.play(soundIDs[2], 1, 1, 1, 0, 1);
+                }
             }
 
             @Override
@@ -145,7 +147,7 @@ public class GameActivity extends FragmentActivity {
             spe.putBoolean(holder.getFile(j).getName(), holder.wasPlayed(j));
         }
         spe.apply();
-        if(timer != null)
+        if (timer != null)
             timer.cancel();
         if (!isFinishing())
             finish();
