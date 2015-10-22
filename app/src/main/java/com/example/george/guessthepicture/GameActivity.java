@@ -9,6 +9,7 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -28,21 +29,17 @@ public class GameActivity extends FragmentActivity {
     private CountDownTimer timer;
     private SoundPool soundPool;
     private int[] soundIDs;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        initialize();
-        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
-        soundIDs = new int[2];
-        soundIDs[0] = soundPool.load(getApplicationContext(), R.raw.correct, 1);
-        soundIDs[1] = soundPool.load(getApplicationContext(), R.raw.wrong, 1);
-
-        if(holder.size() == 0) {
+        if(!initialize()) {
             Toast.makeText(getApplicationContext(), "Download first", Toast.LENGTH_LONG).show();
             finish();
+            return;
         } else {
             // Instantiate a ViewPager and a PagerAdapter.
             mPager = (CustomViewPager) findViewById(R.id.pager);
@@ -67,17 +64,28 @@ public class GameActivity extends FragmentActivity {
         timer.start();
     }
 
-    private void initialize() {
+    @SuppressWarnings("deprecation")
+    private boolean initialize() {
         nCorrect = nTotal = 0;
         holder = new FileAndDetailsHolder();
-        File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        SharedPreferences sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
+        sharedPreferences = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
 
-        for (File child: path.listFiles()) {
-            holder.add(child, sp.getBoolean(child.getName(), false));
+        File path = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (path == null) {
+            return false;
         }
-        //choose randomly
+        for (File child: path.listFiles()) {
+            holder.add(child, sharedPreferences.getBoolean(child.getName(), false));
+        }
+
         holder.shuffle();
+
+        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        soundIDs = new int[2];
+        soundIDs[0] = soundPool.load(getApplicationContext(), R.raw.correct, 1);
+        soundIDs[1] = soundPool.load(getApplicationContext(), R.raw.wrong, 1);
+
+        return holder.size() > 0;
     }
 
     public File getFile(int index) {
@@ -113,8 +121,8 @@ public class GameActivity extends FragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPreferences sp = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
-        SharedPreferences.Editor spe = sp.edit();
+        sharedPreferences = getSharedPreferences(DownloadTask.SHARED_PREFERENCES, 0);
+        SharedPreferences.Editor spe = sharedPreferences.edit();
         spe.clear();
         for(int j = 0; j < holder.size(); j++) {
             spe.putBoolean(holder.getFile(j).getName(), holder.wasPlayed(j));
