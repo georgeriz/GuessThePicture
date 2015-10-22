@@ -1,13 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/game_container">
+    android:layout_height="match_parent">
 
-    <com.example.george.guessthepicture.CustomViewPager
-        android:id="@+id/pager"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keepScreenOn="true" />
+        android:id="@+id/countdown_image"
+        android:src="@drawable/miniwikia_button_3"/>
 
 </RelativeLayout>
