@@ -99,8 +99,6 @@ public class GameActivity extends FragmentActivity implements TimeUpFragment.OnF
 
             @Override
             public void onFinish() {
-                Toast.makeText(getApplicationContext(), "Result: " + nCorrect + "/" + nTotal,
-                        Toast.LENGTH_LONG).show();
                 mPager.setVisibility(View.GONE);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = new TimeUpFragment();

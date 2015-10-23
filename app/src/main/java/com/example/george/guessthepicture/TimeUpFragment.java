@@ -43,9 +43,6 @@ public class TimeUpFragment extends Fragment {
         handler.postDelayed(runnable, 2000);
     }
 
-    //TODO handle back pressed
-
-    // TODO: Rename method, update argument and hook method into UI event
     public void fragmentDone() {
         if (mListener != null) {
             mListener.onFragmentInteraction();
@@ -80,8 +77,7 @@ public class TimeUpFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction();
+        void onFragmentInteraction();
     }
 
 }
