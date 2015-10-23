@@ -12,11 +12,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
 
-public class GameActivity extends FragmentActivity {
+public class GameActivity extends FragmentActivity implements TimeUpFragment.OnFragmentInteractionListener{
     final static String NUMBER_CORRECT = "com.example.george.guessthepicture.CORRECT";
     final static String NUMBER_TOTAL = "com.example.george.guessthepicture.TOTAL";
     /**
@@ -100,8 +101,11 @@ public class GameActivity extends FragmentActivity {
             public void onFinish() {
                 Toast.makeText(getApplicationContext(), "Result: " + nCorrect + "/" + nTotal,
                         Toast.LENGTH_LONG).show();
-                showResults();
-                finish();
+                mPager.setVisibility(View.GONE);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = new TimeUpFragment();
+                fragmentTransaction.add(R.id.game_container, fragment, "timeup_fragment");
+                fragmentTransaction.commit();
             }
         };
         timer.start();
@@ -151,5 +155,11 @@ public class GameActivity extends FragmentActivity {
             timer.cancel();
         if (!isFinishing())
             finish();
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+        showResults();
+        finish();
     }
 }
