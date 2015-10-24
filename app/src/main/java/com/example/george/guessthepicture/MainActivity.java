@@ -1,9 +1,11 @@
 package com.example.george.guessthepicture;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,12 +31,18 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            String state = Environment.getExternalStorageState();
-            if (Environment.MEDIA_MOUNTED.equals(state)) {
-                DownloadTask downloadTask = new DownloadTask(this, 25);
-                downloadTask.execute(URL_Pool.imgur15_imageshack10());
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            Boolean wifi_only = sharedPref.getBoolean("pref_wifi_only", true);
+            if (!wifi_only || networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                String state = Environment.getExternalStorageState();
+                if (Environment.MEDIA_MOUNTED.equals(state)) {
+                    DownloadTask downloadTask = new DownloadTask(this, 25);
+                    downloadTask.execute(URL_Pool.imgur15_imageshack10());
+                } else {
+                    Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No wifi found", Toast.LENGTH_LONG).show();
             }
         } else {
             Toast.makeText(this, "No network found", Toast.LENGTH_LONG).show();
