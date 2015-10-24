@@ -71,11 +71,12 @@ public class GameActivity extends FragmentActivity implements TimeUpFragment.OnF
         holder.shuffle();
 
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        soundIDs = new int[4];
+        soundIDs = new int[5];
         soundIDs[0] = soundPool.load(getApplicationContext(), R.raw.correct, 1);
         soundIDs[1] = soundPool.load(getApplicationContext(), R.raw.wrong, 1);
         soundIDs[2] = soundPool.load(getApplicationContext(), R.raw.countdown, 1);
         soundIDs[3] = soundPool.load(getApplicationContext(), R.raw.start_game, 1);
+        soundIDs[4] = soundPool.load(getApplicationContext(), R.raw.time_up, 1);
 
         return holder.size() > 0;
     }

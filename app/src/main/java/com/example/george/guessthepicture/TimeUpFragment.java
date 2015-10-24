@@ -40,6 +40,8 @@ public class TimeUpFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        GameActivity gameActivity = (GameActivity) getActivity();
+        gameActivity.soundPool.play(gameActivity.soundIDs[4], 1, 1, 1, 0, 1);
         handler.postDelayed(runnable, 2000);
     }
 
