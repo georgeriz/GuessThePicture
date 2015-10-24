@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            // Display the fragment as the main content.
+            getFragmentManager().beginTransaction()
+                    .add(android.R.id.content, new SettingsFragment())
+                    .addToBackStack(null)
+                    .commit();
             return true;
         }
 
