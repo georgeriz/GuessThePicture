@@ -21,17 +21,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartClicked(View v) {
-        Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
 
-    public void refresh(View v) {
+    public void onRefreshClicked(View v) {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             String state = Environment.getExternalStorageState();
             if (Environment.MEDIA_MOUNTED.equals(state)) {
-                DownloadTask downloadTask = new DownloadTask(getApplicationContext(), 25);
+                DownloadTask downloadTask = new DownloadTask(this, 25);
                 downloadTask.execute(URL_Pool.imgur15_imageshack10());
             } else {
                 Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
@@ -57,11 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            // Display the fragment as the main content.
-            getFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new SettingsFragment())
-                    .addToBackStack(null)
-                    .commit();
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
