@@ -36,8 +36,11 @@ public class MainActivity extends AppCompatActivity {
             if (!wifi_only || networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
                 String state = Environment.getExternalStorageState();
                 if (Environment.MEDIA_MOUNTED.equals(state)) {
-                    DownloadTask downloadTask = new DownloadTask(this, 25);
-                    downloadTask.execute(URL_Pool.imgur15_imageshack10());
+                    //TODO get json from custom server
+                    GetURLsTask getURLsTask = new GetURLsTask();
+                    getURLsTask.execute("http://perfect-lantern-109911.appspot.com");
+                    /*DownloadTask downloadTask = new DownloadTask(this, 25);
+                    downloadTask.execute(URL_Pool.imgur15_imageshack10());*/
                 } else {
                     Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
                 }
