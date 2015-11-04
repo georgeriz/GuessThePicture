@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +29,18 @@ public class GetURLsTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         Log.i(MainActivity.TAG, "The result is: " + result);
+        try {
+            JSONObject json = new JSONObject(result);
+            JSONArray jra = json.getJSONArray("results");
+            int size = jra.length();
+            Log.i(MainActivity.TAG, "the size is: " + size);
+            for (int i = 0; i < size; i++) {
+                Log.i(MainActivity.TAG, "item: " + jra.getString(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i(MainActivity.TAG, "json");
+        }
     }
 
     private String downloadUrl(String myUrl) {
