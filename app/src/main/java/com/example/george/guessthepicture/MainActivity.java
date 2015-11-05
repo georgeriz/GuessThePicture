@@ -36,11 +36,22 @@ public class MainActivity extends AppCompatActivity {
             if (!wifi_only || networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
                 String state = Environment.getExternalStorageState();
                 if (Environment.MEDIA_MOUNTED.equals(state)) {
-                    //TODO get json from custom server
                     GetURLsTask getURLsTask = new GetURLsTask();
+                    getURLsTask.setUrlsDownloadListener(new GetURLsTask.UrlsDownloadListener() {
+                        @Override
+                        public void onUrlsDownloadSuccessful(String[] urls) {
+                            DownloadTask downloadTask = new DownloadTask(getApplicationContext(),
+                                    urls.length);
+                            downloadTask.execute(urls);
+                        }
+
+                        @Override
+                        public void onUrlsDownloadFail() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Couldn't load. Try again later", Toast.LENGTH_LONG).show();
+                        }
+                    });
                     getURLsTask.execute("http://perfect-lantern-109911.appspot.com");
-                    /*DownloadTask downloadTask = new DownloadTask(this, 25);
-                    downloadTask.execute(URL_Pool.imgur15_imageshack10());*/
                 } else {
                     Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
                 }
@@ -61,18 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

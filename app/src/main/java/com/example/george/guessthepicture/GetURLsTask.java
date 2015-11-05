@@ -1,6 +1,5 @@
 package com.example.george.guessthepicture;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,12 +14,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.MalformedInputException;
 
-/**
- * Created by George on 2015-11-04.
- */
 public class GetURLsTask extends AsyncTask<String, Void, String> {
+    UrlsDownloadListener urlsDownloadListener;
+
+    public void setUrlsDownloadListener(UrlsDownloadListener urlsDownloadListener) {
+        this.urlsDownloadListener = urlsDownloadListener;
+    }
+
     @Override
     protected String doInBackground(String... params) {
         return downloadUrl(params[0]);
@@ -28,23 +29,30 @@ public class GetURLsTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Log.i(MainActivity.TAG, "The result is: " + result);
-        try {
-            JSONObject json = new JSONObject(result);
-            JSONArray jra = json.getJSONArray("results");
-            int size = jra.length();
-            Log.i(MainActivity.TAG, "the size is: " + size);
-            for (int i = 0; i < size; i++) {
-                Log.i(MainActivity.TAG, "item: " + jra.getString(i));
+        if (result.isEmpty()) {
+            urlsDownloadListener.onUrlsDownloadFail();
+        } else {
+            Log.i(MainActivity.TAG, "The result is: " + result);
+            try {
+                JSONObject jsonResult = new JSONObject(result);
+                JSONArray jsonUrlArray = jsonResult.getJSONArray("results");
+                int arraySize = jsonUrlArray.length();
+                Log.i(MainActivity.TAG, "the size is: " + arraySize);
+                String[] urlArray = new String[arraySize];
+                for (int i = 0; i < arraySize; i++) {
+                    urlArray[i] =jsonUrlArray.getString(i);
+                    Log.i(MainActivity.TAG, "item: " + jsonUrlArray.getString(i));
+                }
+                urlsDownloadListener.onUrlsDownloadSuccessful(urlArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.i(MainActivity.TAG, "json");
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.i(MainActivity.TAG, "json");
         }
     }
 
     private String downloadUrl(String myUrl) {
-        InputStream is = null;
+        InputStream is;
         String response = "";
         try {
             URL url = new URL(myUrl);
@@ -54,6 +62,7 @@ public class GetURLsTask extends AsyncTask<String, Void, String> {
             if(response_code == HttpURLConnection.HTTP_OK) {
                 is = connection.getInputStream();
                 response = convertInputStreamToString(is);
+                is.close();
             } else {
                 Log.i(MainActivity.TAG, "response code: " + response_code + " response: " +
                         connection.getResponseMessage());
@@ -71,13 +80,15 @@ public class GetURLsTask extends AsyncTask<String, Void, String> {
 
     private String convertInputStreamToString(InputStream inputStream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
+        String line;
         String result = "";
         while((line = bufferedReader.readLine()) != null)
             result += line;
-
-        inputStream.close();
         return result;
+    }
 
+    public interface UrlsDownloadListener {
+        void onUrlsDownloadSuccessful(String[] urls);
+        void onUrlsDownloadFail();
     }
 }
