@@ -46,7 +46,7 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
         mBuilder = new NotificationCompat.Builder(myContext);
         mBuilder.setContentTitle("Images Download")
                 .setContentText("Download in progress")
-                .setSmallIcon(R.drawable.icon_notification_cards_spades)
+                .setSmallIcon(R.drawable.ic_get_app_white_24dp)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
     }

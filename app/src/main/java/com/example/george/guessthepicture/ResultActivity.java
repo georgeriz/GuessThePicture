@@ -3,6 +3,7 @@ package com.example.george.guessthepicture;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class ResultActivity extends AppCompatActivity {
@@ -19,5 +20,11 @@ public class ResultActivity extends AppCompatActivity {
         int nTotal = intent.getIntExtra(GameActivity.NUMBER_TOTAL, 0);
 
         resultText.setText(nCorrect + "/" + nTotal);
+    }
+
+    public void onPlayAgainClicked(View v){
+        finish();
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 }
