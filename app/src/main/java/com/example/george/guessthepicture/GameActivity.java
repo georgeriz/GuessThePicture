@@ -13,8 +13,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 
 import java.io.File;
 
@@ -33,7 +38,9 @@ public class GameActivity extends FragmentActivity
     public int[] soundIDs;
     private SharedPreferences sharedPreferences;
     private FragmentManager fragmentManager;
+    private InterstitialAd mInterstitialAd;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +57,28 @@ public class GameActivity extends FragmentActivity
             Fragment fragment = new CountDownFragment();
             fragmentTransaction.add(R.id.game_container, fragment, "countdown_fragment");
             fragmentTransaction.commit();
+
+            soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+            soundIDs = new int[5];
+            soundIDs[0] = soundPool.load(getApplicationContext(), R.raw.correct, 1);
+            soundIDs[1] = soundPool.load(getApplicationContext(), R.raw.wrong, 1);
+            soundIDs[2] = soundPool.load(getApplicationContext(), R.raw.countdown, 1);
+            soundIDs[3] = soundPool.load(getApplicationContext(), R.raw.start_game, 1);
+            soundIDs[4] = soundPool.load(getApplicationContext(), R.raw.time_up, 1);
+
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    requestNewInterstitial();
+                    showResults();
+                }
+            });
+            requestNewInterstitial();
         }
     }
 
-    @SuppressWarnings("deprecation")
     private boolean initialize() {
         nCorrect = nTotal = 0;
         holder = new FileAndDetailsHolder();
@@ -66,16 +91,7 @@ public class GameActivity extends FragmentActivity
         for (File child : path.listFiles()) {
             holder.add(child, sharedPreferences.getBoolean(child.getName(), false));
         }
-
         holder.shuffle();
-
-        soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        soundIDs = new int[5];
-        soundIDs[0] = soundPool.load(getApplicationContext(), R.raw.correct, 1);
-        soundIDs[1] = soundPool.load(getApplicationContext(), R.raw.wrong, 1);
-        soundIDs[2] = soundPool.load(getApplicationContext(), R.raw.countdown, 1);
-        soundIDs[3] = soundPool.load(getApplicationContext(), R.raw.start_game, 1);
-        soundIDs[4] = soundPool.load(getApplicationContext(), R.raw.time_up, 1);
 
         return holder.size() > 0;
     }
@@ -140,6 +156,24 @@ public class GameActivity extends FragmentActivity
         startActivity(intent);
     }
 
+    private void showAd() {
+        if (mInterstitialAd.isLoaded()) {
+            Log.i(MainActivity.TAG, "ad was Loaded");
+            mInterstitialAd.show();
+        } else {
+            Log.i(MainActivity.TAG, "ad was not loaded");
+            showResults();
+        }
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("24819F61D704E0FB4247107D9081EDB9")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -174,7 +208,7 @@ public class GameActivity extends FragmentActivity
 
     @Override
     public void onFragmentInteraction() {
-        showResults();
+        showAd();
         finish();
     }
 }
