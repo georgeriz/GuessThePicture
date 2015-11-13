@@ -55,18 +55,18 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onUrlsDownloadFail() {
                             Toast.makeText(getApplicationContext(),
-                                    "Couldn't load. Try again later", Toast.LENGTH_LONG).show();
+                                    R.string.load_fail, Toast.LENGTH_LONG).show();
                         }
                     });
-                    getURLsTask.execute("http://perfect-lantern-109911.appspot.com");
+                    getURLsTask.execute(getString(R.string.main_url));
                 } else {
-                    Toast.makeText(this, "No external storage found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.external_storage_fail, Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(this, "No wifi found", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.wifi_fail, Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "No network found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.network_fail, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -40,7 +40,8 @@ public class GameActivity extends FragmentActivity
         setContentView(R.layout.activity_game);
 
         if (!initialize()) {
-            Toast.makeText(getApplicationContext(), R.string.download_images_first, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.download_images_first,
+                    Toast.LENGTH_LONG).show();
             finish();
         } else {
             //first show a countdown fragment

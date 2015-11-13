@@ -7,13 +7,27 @@
     <string name="title_activity_result">Score</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!--BUTTONS-->
     <string name="start_game_button">Start</string>
     <string name="refresh_button">Refresh</string>
     <string name="play_again_button">Play Again</string>
 
+    <!--TEXT-->
     <string name="present_score_text">Your score is:</string>
-    
-    <string name="download_images_first">Download some images first. Push Refresh.</string>
+    <string name="image_download">Download images</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_in_progress">Download in progress</string>
 
+    <!--FAIL MESSAGES-->
+    <string name="download_images_first">Download some images first. Push Refresh.</string>
+    <string name="load_fail">Couldn\'t load. Try again later.</string>
+    <string name="external_storage_fail">No external storage found</string>
+    <string name="wifi_fail">No wifi found</string>
+    <string name="network_fail">No network found</string>
+
+    <!--URL FOR IMAGES-->
+    <string name="main_url">http://perfect-lantern-109911.appspot.com</string>
+
+    <!--BANNER ADD ID-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

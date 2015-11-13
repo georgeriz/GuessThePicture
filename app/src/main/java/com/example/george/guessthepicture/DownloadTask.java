@@ -22,9 +22,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by George on 2015-10-18.
- */
 public class DownloadTask extends AsyncTask<String, Integer, Integer> {
     private final int NOTIFICATION_ID = 1;
     private final int PENDING_INTENT_REQUEST_CODE = 0;
@@ -44,8 +41,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
                 PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotifyManager = (NotificationManager) myContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(myContext);
-        mBuilder.setContentTitle("Images Download")
-                .setContentText("Download in progress")
+        mBuilder.setContentTitle(myContext.getString(R.string.image_download))
+                .setContentText(myContext.getString(R.string.download_in_progress))
                 .setSmallIcon(R.drawable.ic_get_app_white_24dp)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
@@ -94,7 +91,8 @@ public class DownloadTask extends AsyncTask<String, Integer, Integer> {
     protected void onPostExecute(Integer result) {
         Log.i(MainActivity.TAG, "Download and save complete");
         Toast.makeText(myContext, "Download and save complete", Toast.LENGTH_LONG).show();
-        mBuilder.setContentText("Download complete").setProgress(0, 0, false);
+        mBuilder.setContentText(myContext.getString(R.string.download_complete))
+                .setProgress(0, 0, false);
         mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
         updateSharedPreferences();
     }
