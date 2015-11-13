@@ -18,13 +18,11 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class GameActivity extends FragmentActivity implements TimeUpFragment.OnFragmentInteractionListener {
+public class GameActivity extends FragmentActivity
+        implements TimeUpFragment.OnFragmentInteractionListener {
     final static String NUMBER_CORRECT = "com.example.george.guessthepicture.CORRECT";
     final static String NUMBER_TOTAL = "com.example.george.guessthepicture.TOTAL";
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
+
     private CustomViewPager mPager;
 
     private FileAndDetailsHolder holder;
@@ -42,7 +40,7 @@ public class GameActivity extends FragmentActivity implements TimeUpFragment.OnF
         setContentView(R.layout.activity_game);
 
         if (!initialize()) {
-            Toast.makeText(getApplicationContext(), "Download first", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.download_images_first, Toast.LENGTH_LONG).show();
             finish();
         } else {
             //first show a countdown fragment
