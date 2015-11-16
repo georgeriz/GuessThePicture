@@ -46,10 +46,12 @@ public class FileAndDetailsHolder {
 
     public void shuffle() {
         Collections.shuffle(list);
+    }
+
+    public void bringUnusedFirst() {
         LinkedList<Item> linkedList = new LinkedList<>();
         for (Item item: list) {
-            int r = new Random(System.nanoTime()).nextInt(10);
-            if(item.getPlayed() && r < 9 ) {
+            if(item.getPlayed()) {
                 linkedList.addLast(item);
             } else {
                 linkedList.addFirst(item);

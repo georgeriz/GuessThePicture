@@ -97,8 +97,9 @@ public class GameActivity extends FragmentActivity
             }
         }
         if (playedCounter < holder.size()) {
-            holder.shuffle();
+            holder.bringUnusedFirst();
         } else {
+            holder.shuffle();
             promptUserToRefresh();
         }
         return holder.size() > 0;
