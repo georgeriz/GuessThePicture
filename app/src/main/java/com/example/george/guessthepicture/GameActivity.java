@@ -88,12 +88,24 @@ public class GameActivity extends FragmentActivity
         if (path == null) {
             return false;
         }
+        int playedCounter = 0;
         for (File child : path.listFiles()) {
-            holder.add(child, sharedPreferences.getBoolean(child.getName(), false));
+            boolean wasPlayed = sharedPreferences.getBoolean(child.getName(), false);
+            holder.add(child, wasPlayed);
+            if (wasPlayed) {
+                playedCounter++;
+            }
         }
-        holder.shuffle();
-
+        if (playedCounter < holder.size()) {
+            holder.shuffle();
+        } else {
+            promptUserToRefresh();
+        }
         return holder.size() > 0;
+    }
+
+    private void promptUserToRefresh() {
+        //do nothing for now
     }
 
     public void startGame() {
